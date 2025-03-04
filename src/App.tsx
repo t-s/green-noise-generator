@@ -74,7 +74,7 @@ function App() {
       <div className="bg-white p-8 rounded-2xl shadow-lg max-w-md w-full mx-4">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-green-800 mb-2">Green Noise Generator</h1>
-          <p className="text-green-600">Soothing middle-frequency noise for relaxation</p>
+          <p className="text-green-600">Green noise for relaxation and sleep</p>
         </div>
 
         <div className="flex flex-col items-center gap-6">
@@ -107,7 +107,7 @@ function App() {
           </div>
 
           <p className="text-sm text-gray-500 text-center mt-4">
-            {isPlaying ? 'Click to stop' : 'Click to play'} green noise
+            {isPlaying ? 'Click to stop' : 'Click to play'}
           </p>
         </div>
       </div>
