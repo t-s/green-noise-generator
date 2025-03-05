@@ -28,24 +28,31 @@ function App() {
 
     const bufferSize = 4096;
     const noiseNode = audioContext.createScriptProcessor(bufferSize, 1, 1);
-    
+
+    // State to maintain continuity between buffers
+    let previousSample = 0;
+
     noiseNode.onaudioprocess = (e) => {
-      const output = e.outputBuffer.getChannelData(0);
-      
-      // Generate noise
-      for (let i = 0; i < bufferSize; i++) {
-        // Green noise emphasizes middle frequencies
-        let noise = 0;
-        for (let j = 0; j < 8; j++) {
-          noise += Math.random() * Math.exp(-Math.abs(j - 3) / 2);
+        const output = e.outputBuffer.getChannelData(0);
+
+        // Generate green noise
+        for (let i = 0; i < bufferSize; i++) {
+            // Generate white noise
+            const whiteNoise = Math.random() * 2 - 1; // Random values between -1 and 1
+
+            // Apply a -6 dB per octave rolloff using a simple low-pass filter
+            const noise = 0.99 * (whiteNoise + previousSample); // Strong low-pass filter
+            previousSample = noise; // Store the current sample for the next iteration
+
+            // Normalize to prevent clipping
+            output[i] = noise * 0.5; // Scale down to avoid clipping
         }
-        output[i] = noise / 4;
-      }
     };
 
+    // Connect the noise node to the gain node
     noiseNode.connect(gainNode);
     return noiseNode;
-  }, [audioContext, gainNode]);
+}, [audioContext, gainNode]);
 
   // Handle play/pause
   const toggleNoise = () => {
